@@ -23,8 +23,8 @@ void main(){
   print (value3);
   
   value1 = '55';
-  value2 = '56'; // cant assign new value
-  value3 = '53';
+ // value2 = '56'; // cant assign new value
+ // value3 = '53';
   
   
 }
