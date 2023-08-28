@@ -6,6 +6,7 @@ void main(){
   print (subtract(12, 2));
   print (subtract(12, 4));
   print (subtract(12, 6));
+  print(name());
   
 }
 
@@ -16,4 +17,8 @@ void sum(int num1 , int num2){
 
 int subtract (int x , int y ){
   return x-y;  
+}
+
+String name(){
+  return 'Akashay';
 }
