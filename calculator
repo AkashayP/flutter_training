@@ -1,0 +1,172 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(CalculatorApp());
+}
+
+class CalculatorApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Calculator',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: CalculatorScreen(),
+    );
+  }
+}
+
+class CalculatorScreen extends StatefulWidget {
+  @override
+  _CalculatorScreenState createState() => _CalculatorScreenState();
+}
+
+class _CalculatorScreenState extends State<CalculatorScreen> {
+  String _displayText = '';
+  double _result = 0;
+  String _currentOperator = '';
+  String _inputValue = '';
+
+  void _onNumberButtonPressed(String value) {
+    setState(() {
+      _inputValue += value;
+      _displayText = _inputValue;
+    });
+  }
+
+  void _onOperatorButtonPressed(String operator) {
+    setState(() {
+      if (_currentOperator.isNotEmpty) {
+        _calculate();
+      }
+      _currentOperator = operator;
+      _result = double.parse(_inputValue);
+      _inputValue = '';
+    });
+  }
+
+  void _calculate() {
+    double inputValue = double.parse(_inputValue);
+    switch (_currentOperator) {
+      case '+':
+        _result += inputValue;
+        break;
+      case '-':
+        _result -= inputValue;
+        break;
+      case '*':
+        _result *= inputValue;
+        break;
+      case '/':
+        _result /= inputValue;
+        break;
+    }
+    _displayText = _result.toString();
+    _currentOperator = '';
+    _inputValue = '';
+  }
+
+  void _onEqualsButtonPressed() {
+    setState(() {
+      _calculate();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter Calculator'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              alignment: Alignment.bottomRight,
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                _displayText,
+                style: TextStyle(fontSize: 36.0),
+              ),
+            ),
+          ),
+          Divider(),
+          SizedBox( height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildNumberButton('7'),
+              _buildNumberButton('8'),
+              _buildNumberButton('9'),
+              _buildOperatorButton('/'),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildNumberButton('4'),
+              _buildNumberButton('5'),
+              _buildNumberButton('6'),
+              _buildOperatorButton('*'),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildNumberButton('1'),
+              _buildNumberButton('2'),
+              _buildNumberButton('3'),
+              _buildOperatorButton('-'),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildNumberButton('0'),
+              _buildOperatorButton('+'),
+              _buildEqualsButton(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNumberButton(String value) {
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: () => _onNumberButtonPressed(value),
+        child: Text(value),
+      ),
+    );
+  }
+
+  Widget _buildOperatorButton(String operator) {
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: () => _onOperatorButtonPressed(operator),
+        child: Text(operator),
+      ),
+    );
+  }
+
+  Widget _buildEqualsButton() {
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: _onEqualsButtonPressed,
+        child: Text('='),
+      ),
+    );
+  }
+}
