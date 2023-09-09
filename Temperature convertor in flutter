@@ -1,0 +1,82 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(TemperatureConverterApp());
+}
+
+class TemperatureConverterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: TemperatureConverter(),
+    );
+  }
+}
+
+class TemperatureConverter extends StatefulWidget {
+  @override
+  _TemperatureConverterState createState() => _TemperatureConverterState();
+}
+
+class _TemperatureConverterState extends State<TemperatureConverter> {
+  double _inputValue = 0.0;
+  double _outputValue = 0.0;
+  String _selectedUnit = 'Celsius';
+
+  void _convertTemperature(double inputValue, String selectedUnit) {
+    if (selectedUnit == 'Celsius') {
+      // Convert Celsius to Fahrenheit
+      _outputValue = (inputValue * 9 / 5) + 32;
+    } else {
+      // Convert Fahrenheit to Celsius
+      _outputValue = (inputValue - 32) * 5 / 9;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Temperature Converter'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                setState(() {
+                  _inputValue = double.tryParse(value) ?? 0.0;
+                  _convertTemperature(_inputValue, _selectedUnit);
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Enter Temperature',
+              ),
+            ),
+            SizedBox(height: 20.0),
+            DropdownButton<String>(
+              value: _selectedUnit,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedUnit = newValue!;
+                  _convertTemperature(_inputValue, _selectedUnit);
+                });
+              },
+              items: ['Celsius', 'Fahrenheit'].map((String unit) {
+                return DropdownMenuItem<String>(
+                  value: unit,
+                  child: Text(unit),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 20.0),
+            Text('Converted Temperature: $_outputValue $_selectedUnit'),
+          ],
+        ),
+      ),
+    );
+  }
+}
